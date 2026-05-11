@@ -1,0 +1,95 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>🌍 NearEarth - Asteroides Cercanos</mat-card-title>
+      <mat-card-subtitle>Dashboard de asteroides cercanos a la Tierra</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="startDate = $event.value.toISOString().split('T')[0]">
+          <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="endDate = $event.value.toISOString().split('T')[0]">
+          <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="searchByDateRange()">
+          <mat-icon>search</mat-icon> Buscar
+        </button>
+
+        <button mat-button (click)="loadTodayAsteroids()">
+          <mat-icon>today</mat-icon> Hoy
+        </button>
+      </div>
+
+      <div *ngIf="loading" class="loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+
+      <table mat-table [dataSource]="filteredAsteroids" class="full-width">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let asteroid">
+            <a [routerLink]="['/asteroids', asteroid.id]">{{ asteroid.name }}</a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Fecha Aproximación</th>
+          <td mat-cell *matCellDef="let asteroid">{{ asteroid.closeApproachDate | date:'shortDate' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="velocity">
+          <th mat-header-cell *matHeaderCellDef>Velocidad (km/h)</th>
+          <td mat-cell *matCellDef="let asteroid">{{ asteroid.relativeVelocity | number:'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="distance">
+          <th mat-header-cell *matHeaderCellDef>Distancia (km)</th>
+          <td mat-cell *matCellDef="let asteroid">{{ asteroid.missDistance | number:'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="hazardous">
+          <th mat-header-cell *matHeaderCellDef>Peligroso</th>
+          <td mat-cell *matCellDef="let asteroid">
+            <mat-chip [color]="asteroid.isPotentiallyHazardous ? 'warn' : 'primary'" selected>
+              {{ asteroid.isPotentiallyHazardous ? 'Sí' : 'No' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dangerScore">
+          <th mat-header-cell *matHeaderCellDef>DangerScore</th>
+          <td mat-cell *matCellDef="let asteroid">
+            <mat-progress-bar [value]="asteroid.dangerScore" [color]="getDangerColor(asteroid.dangerScore)"></mat-progress-bar>
+            <span>{{ asteroid.dangerScore | number:'1.0-0' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let asteroid">
+            <button mat-button color="primary" [routerLink]="['/asteroids', asteroid.id]">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div *ngIf="filteredAsteroids.length === 0 && !loading" class="no-data">
+        <p>No se encontraron asteroides para el rango de fechas seleccionado.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

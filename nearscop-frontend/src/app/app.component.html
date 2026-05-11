@@ -1,0 +1,18 @@
+<mat-toolbar color="primary" class="toolbar">
+  <span class="toolbar-title">
+    <mat-icon>public</mat-icon>
+    NearEarth
+  </span>
+  <div class="toolbar-links">
+    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <mat-icon>list</mat-icon> Asteroides
+    </a>
+    <a mat-button routerLink="/stats" routerLinkActive="active">
+      <mat-icon>bar_chart</mat-icon> Estadísticas
+    </a>
+  </div>
+</mat-toolbar>
+
+<main class="main-content">
+  <router-outlet />
+</main>

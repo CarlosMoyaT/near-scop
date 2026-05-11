@@ -1,0 +1,36 @@
+.container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.loading {
+  margin: 20px 0;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+a {
+  color: #3f51b5;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}

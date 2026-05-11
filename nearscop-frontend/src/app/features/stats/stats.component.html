@@ -1,0 +1,97 @@
+<div class="container" *ngIf="stats; else loading">
+  <h2>📊 Estadísticas de Asteroides</h2>
+
+  <div class="stats-grid">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Total Asteroides</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ stats.totalAsteroids }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Peligrosos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">
+          {{ stats.hazardousCount }}
+          <mat-chip [color]="stats.hazardousCount > 0 ? 'warn' : 'primary'" selected>
+            {{ stats.hazardousCount > 0 ? 'Alerta' : 'Seguro' }}
+          </mat-chip>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Velocidad Promedio</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ stats.averageVelocity | number:'1.0-0' }} km/h</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Distancia Mínima</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ stats.closestDistance | number:'1.0-0' }} km</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Mayor Diámetro</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ stats.largestDiameter | number:'1.0-2' }} km</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Lista de Asteroides Peligrosos</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table mat-table [dataSource]="stats.topHazardous" class="full-width">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let asteroid">{{ asteroid.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dangerScore">
+          <th mat-header-cell *matHeaderCellDef>DangerScore</th>
+          <td mat-cell *matCellDef="let asteroid">
+            <mat-progress-bar [value]="asteroid.dangerScore" [color]="getDangerColor(asteroid.dangerScore)"></mat-progress-bar>
+            <span>{{ asteroid.dangerScore | number:'1.0-0' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="velocity">
+          <th mat-header-cell *matHeaderCellDef>Velocidad (km/h)</th>
+          <td mat-cell *matCellDef="let asteroid">{{ asteroid.relativeVelocity | number:'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="distance">
+          <th mat-header-cell *matHeaderCellDef>Distancia (km)</th>
+          <td mat-cell *matCellDef="let asteroid">{{ asteroid.missDistance | number:'1.0-0' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-template #loading>
+  <div class="loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Cargando estadísticas...</p>
+  </div>
+</ng-template>

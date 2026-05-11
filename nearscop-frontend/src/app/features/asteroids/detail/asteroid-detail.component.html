@@ -1,0 +1,109 @@
+<div class="container" *ngIf="asteroid; else loadingOrError">
+  <button mat-button routerLink="/" class="back-button">
+    <mat-icon>arrow_back</mat-icon> Volver
+  </button>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ asteroid.name }}</mat-card-title>
+      <mat-card-subtitle>
+        <a [href]="asteroid.nasaJplUrl" target="_blank">Ver en NASA JPL</a>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="danger-score-section">
+        <h3>DangerScore</h3>
+        <mat-progress-bar 
+          [value]="asteroid.dangerScore" 
+          [color]="getDangerColor(asteroid.dangerScore)"
+          mode="determinate">
+        </mat-progress-bar>
+        <span class="score-value">{{ asteroid.dangerScore | number:'1.0-0' }} / 100</span>
+      </div>
+
+      <div class="info-grid">
+        <mat-list>
+          <div mat-subheader>Información General</div>
+          <mat-list-item>
+            <mat-icon matListItemIcon [color]="asteroid.isPotentiallyHazardous ? 'warn' : 'primary'">
+              {{ asteroid.isPotentiallyHazardous ? 'warning' : 'check_circle' }}
+            </mat-icon>
+            <div matListItemTitle>Peligrosidad</div>
+            <div matListItemLine>
+              <mat-chip [color]="asteroid.isPotentiallyHazardous ? 'warn' : 'primary'" selected>
+                {{ asteroid.isPotentiallyHazardous ? 'Peligroso' : 'No peligroso' }}
+              </mat-chip>
+            </div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>speed</mat-icon>
+            <div matListItemTitle>Velocidad Relativa</div>
+            <div matListItemLine>{{ asteroid.relativeVelocity | number:'1.0-0' }} km/h</div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>straighten</mat-icon>
+            <div matListItemTitle>Distancia de Aproximación</div>
+            <div matListItemLine>{{ asteroid.missDistance | number:'1.0-0' }} km</div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>event</mat-icon>
+            <div matListItemTitle>Fecha de Aproximación</div>
+            <div matListItemLine>{{ asteroid.closeApproachDate | date:'fullDate' }}</div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>straighten</mat-icon>
+            <div matListItemTitle>Diámetro Estimado</div>
+            <div matListItemLine>{{ asteroid.estimatedDiameterMin | number:'1.0-2' }} - {{ asteroid.estimatedDiameterMax | number:'1.0-2' }} km</div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>brightness_7</mat-icon>
+            <div matListItemTitle>Magnitud Absoluta</div>
+            <div matListItemLine>{{ asteroid.absoluteMagnitude | number:'1.0-2' }}</div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+
+      <div class="orbital-info" *ngIf="asteroid.orbitalData">
+        <h3>Datos Orbitales</h3>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>public</mat-icon>
+            <div matListItemTitle>Cuerpo Orbitado</div>
+            <div matListItemLine>{{ asteroid.orbitingBody }}</div>
+          </mat-list-item>
+          
+          <mat-list-item *ngIf="asteroid.orbitalData.eccentricity">
+            <mat-icon matListItemIcon>timeline</mat-icon>
+            <div matListItemTitle>Excentricidad</div>
+            <div matListItemLine>{{ asteroid.orbitalData.eccentricity | number:'1.0-4' }}</div>
+          </mat-list-item>
+
+          <mat-list-item *ngIf="asteroid.orbitalData.inclination">
+            <mat-icon matListItemIcon>rotate_right</mat-icon>
+            <div matListItemTitle>Inclinación</div>
+            <div matListItemLine>{{ asteroid.orbitalData.inclination | number:'1.0-2' }}°</div>
+          </mat-list-item>
+
+          <mat-list-item *ngIf="asteroid.orbitalData.orbitalPeriod">
+            <mat-icon matListItemIcon>loop</mat-icon>
+            <div matListItemTitle>Periodo Orbital</div>
+            <div matListItemLine>{{ asteroid.orbitalData.orbitalPeriod | number:'1.0-2' }} días</div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-template #loadingOrError>
+  <div class="loading-container" *ngIf="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Cargando información del asteroide...</p>
+  </div>
+</ng-template>

@@ -1,0 +1,47 @@
+.container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: bold;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-card {
+  margin-bottom: 20px;
+  
+  mat-card-content {
+    padding: 20px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.loading-container {
+  padding: 40px;
+  text-align: center;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
